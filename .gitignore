@@ -1,0 +1,10 @@
+*
+!*/
+!*.y
+!*.lex
+!*.c
+!*.h
+!*.pdf
+!*.paths
+!*.paths.in
+!README

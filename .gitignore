@@ -3,3 +3,7 @@
 !*.c
 !*.h
 !*.pdf
+!*.paths
+!*.paths.in
+!README
+!doc/Outline.txt

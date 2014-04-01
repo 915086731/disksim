@@ -61,7 +61,7 @@ ifeq ($(MODULEDEPS),)
 MODULEDEPS = modules
 endif
 
-all: disksim rms hplcomb syssim
+all: disksim rms hplcomb syssim modules
 
 clean:
 	rm -f TAGS *.o disksim syssim rms hplcomb core libdisksim.a
@@ -81,7 +81,7 @@ distclean: realclean
 modules: 
 	$(MAKE) -C modules
 	mkdir -p ../include/disksim/modules
-	cp -pR modules/*.h ../include/disksim/modules
+	cp -R modules/*.h ../include/disksim/modules
 	cp disksim_interface.h ../include
 
 modules/*.h modules/*.c:

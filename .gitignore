@@ -4,3 +4,4 @@
 !*.lex
 !*.c
 !*.h
+!Makefile

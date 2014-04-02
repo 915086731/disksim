@@ -45,7 +45,7 @@ CFLAGS=-g -I$(LIBDDBG_INCL) -Wall
 lex.libparam.c:	libparam.lex libparam.tab.h libparam.h
 	$(FLEX) -Plibparam $<
 
-libparam.c libparam.tab.c libparam.tab.h: libparam.y libparam.h
+libparam.tab.c libparam.tab.h: libparam.y libparam.h
 	$(BISON) -plibparam --defines $<
 
 LIBPARAM_SRC =  util.c libparam.tab.c  lex.libparam.c 

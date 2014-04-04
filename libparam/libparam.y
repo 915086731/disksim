@@ -448,25 +448,26 @@ PARAM: STRING {
 
 %%
 
-/*  void main(void) { */
+/*
+  void main(void) { 
 
-  //  printvars();
-/*    disksim =  */
-/*      disksim_initialize_disksim_structure(malloc(sizeof(struct disksim)), */
-/*  					 sizeof(struct disksim)); */
-/*    lp_init_typetbl(); */
+    printvars();
+    disksim =  
+      disksim_initialize_disksim_structure(malloc(sizeof(struct disksim)), 
+  					 sizeof(struct disksim)); 
+    lp_init_typetbl(); 
 
-/*    disksim->startaddr = malloc(1<<24); */
-/*    disksim->curroffset = 0; */
-/*    disksim->totallength = 1<<24; */
+    disksim->startaddr = malloc(1<<24); 
+    disksim->curroffset = 0; 
+    disksim->totallength = 1<<24; 
 
-/*    top_file = 0; */
-/*    input_files[0] = disksim_param_create_buffer(stdin, 1<<14); */
+    top_file = 0; 
+    input_files[0] = disksim_param_create_buffer(stdin, 1<<14); 
 
-/*    yyparse(); */
-/*  } */
+    yyparse(); 
+  } 
 
-
+*/
 
 
 

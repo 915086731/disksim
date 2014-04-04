@@ -5,3 +5,5 @@
 !*.c
 !*.h
 !Makefile
+libparam/libparam.tab.h
+libparam/libparam.tab.c

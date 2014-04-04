@@ -36,7 +36,7 @@ all: libparam.a
 	cp  bitvector.h libparam.h include/libparam
 
 FLEX=flex
-BISON=bison
+BISON=bison -t
 YACC=$(BISON)
 
 CFLAGS=-g -I$(LIBDDBG_INCL) -Wall

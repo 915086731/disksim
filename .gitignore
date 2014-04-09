@@ -5,5 +5,6 @@
 !*.c
 !*.h
 !Makefile
+!notes.txt
 libparam/libparam.tab.h
 libparam/libparam.tab.c

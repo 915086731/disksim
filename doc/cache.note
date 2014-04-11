@@ -1,0 +1,59 @@
+2.3.2.2分析cache源代码
+相关文件：disksim.c ，disksim_cache.c ，disksim_cachemem.c ，disksim_cachedev.c 
+其中以disksim_cache.c为入口，调用disksim_cachemem.c和disksim_cachedev.c当中的函数；disksim.c当中的则是最基本的函数，由disksim_cachemem.c和disksim_cachedev.c调用。
+因为内容太多，下面只贴上Disksim.c几个重要的函数及部分相关实现(因为disksim_cachedev.c和disksim_cachemem.c的实现过程相似，这里不再赘述)：
+int cache_get_maxreqsize() 
+cachemem_get_maxreqsize()
+ //返回cachemem.c中cache_def.maxreqsize项
+cachedev_get_ maxreqsize() 
+ //返回cachedev.c中cache_def.maxreqsize项
+
+int cache_get_block()  
+//得到适当的块，上锁并准备被读或写
+  cachemem_get_block()
+  //调用disksim.c中的getfromextraq(), getfromextraq()的功能是从extraq队列中取出一个空event结构；
+把该结构赋给cache_event *rwdesc, cache_event为自定义结构类型；
+  //extraq的定义是 event *extraq ,其中event是自定义结构类型；
+  //如果是是读事件，调用（静态函数）cache_read_continue()，其功能是读，cache_read_continue()（调用了cache_find_atom()（hash定位,找出有效的部分）与cache_issue_fillreq(跳过作废的部分，返回继续读得位置    )）；如果是写事件，调用（静态函数）cache_write_continue();
+cachedev_get_block()  //来自cachedev.c
+
+void cache_free_block_clean()
+//存取完以后释放块, 删除锁；并且更新lru
+  cachemem_free_block_clean()
+  //调用cache_find_atom(),找出未分配过的空间，因为未分配的空间不应该被释放；
+  //调用cache_free_read_lock()；其内部调用了cache_free_write_lock();用于删除锁；
+  cachedev_free_block_clean()  //来自cachedev.c
+
+int cache_free_block_dirty()
+//一个延迟写——集脏位,删除锁和更新lru(延迟写——负责把脏的，即修改过的缓冲数据写回文件系统)
+//如果缓存不允许延迟写，提出异步
+  cachemem_free_block_dirty()
+  //调用cache_find_atom()和 cache_accsess()，找出dirtied space并重置相应的LRU表；
+  //调用cache_get_read_lock()或cache_free_write_lock()（数据写回文件系统——上锁，否则删除锁）；
+  //调用cache_waitfor_IO；等待一次IO；
+  cachedev_free_block_dirty()
+
+int cache_sync()
+  cachemem_sync()// return(0);
+  cachedev_sync() // return(0);
+
+struct cacheevent *cache_disk_access_complete()
+//一次完整的磁盘访问
+  cachemem_disk_access_complete()
+  //cache_event *temp，当temp指向请求队列(req)的时候，调用cache_waitfor_IO()；
+  //调用cache_idletime_detected(); cache_idletime_detected()调用cache_cleanup_flushdesc(flushdesc);其中参数flushdesc = cache_get_flushdesc();即近期最少使用的块被选中清理掉；
+　　//调用cache_unlock_attached_prefetch(); 其内部调用cache_free_write_unlock();删除相关锁；
+  cachedev_disk_access_complete()
+
+void cache_wakeup_complete()
+  cachemem_wakeup_complete()
+  //cache_event *desc；根据当前desc所指定的type类型不同，使cache进入不同的准备状态；
+　　cachedev_wakeup_complete()
+　　
+void cache_resetstats()
+  cachemem_resetstats()
+  // cache_def *cache；将cache所指的结构的各项参数重置为0；
+  cachedev_resetstats()
+
+static int get_cachetype()
+   cachemem_get_cachetype() //此处只需要调用这个，不需要再调用cachedev_get_cachetype() ，因为所有的caches都一致地遵循这个函数。
